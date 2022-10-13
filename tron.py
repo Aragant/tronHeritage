@@ -85,5 +85,7 @@ class TronWindow(arcade.Window):
 
 
 if __name__ == '__main__':
-    window = MazeWindow()
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, "TRON HERITAGE")
+    tronView = TronWindow()
+    window.show_view(tronView)
     arcade.run()
