@@ -2,14 +2,14 @@ import arcade
 
 
 
-SPRITE_SCALE = 0.01
-SCREEN_WIDTH = 500
-SCREEN_HEIGHT = 500
-SPRITE_OFFSET = 6
+SPRITE_SCALE = 0.02
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 1000
+SPRITE_OFFSET = 10.5
 
-class TronWindow(arcade.Window):
+class TronWindow(arcade.View):
     def __init__(self):
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "TRON HERITAGE")
+        super().__init__()
         self.__obstacles = arcade.SpriteList()
         self.__j1 = arcade.Sprite('boxBlue.png', SPRITE_SCALE)
         self.__j2 = arcade.Sprite('boxRed.png', SPRITE_SCALE)
@@ -25,6 +25,7 @@ class TronWindow(arcade.Window):
         
 
     def on_draw(self):
+        
         arcade.start_render()
         self.__j1.draw()
         self.__j2.draw()
@@ -70,18 +71,31 @@ class TronWindow(arcade.Window):
         self.__j2 = j2Next
 
         if arcade.check_for_collision_with_list(self.__j1, self.__obstacles) or not self.isInside(self.__j1.center_x, self.__j1.center_y):
-            print('j2 win')
-            arcade.close_window()
+            self.window.show_view(WinView("Red"))
         
         if arcade.check_for_collision_with_list(self.__j2, self.__obstacles) or not self.isInside(self.__j2.center_x, self.__j2.center_y):
-            print('j1 win')
-            arcade.close_window()
+            self.window.show_view(WinView("Blue"))
 
     def isInside(self, x, y):
         return x >= 0 and x < SCREEN_WIDTH and y >= 0 and y < SCREEN_HEIGHT    
 
 
+class WinView(arcade.View):
+    def __init__(self, winner):
+        super().__init__()
+        self.__winner = winner
 
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_text(self.__winner + " win !!!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, 32, anchor_x='center', anchor_y='center')
+    
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.ESCAPE:
+            arcade.close_window()
+        
+        if key == arcade.key.SPACE:
+            window = TronWindow()
+            self.window.show_view(window)
 
 
 if __name__ == '__main__':
