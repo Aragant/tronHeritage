@@ -7,7 +7,7 @@ SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
 SPRITE_OFFSET = 6
 
-class MazeWindow(arcade.Window):
+class TronWindow(arcade.Window):
     def __init__(self):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, "TRON HERITAGE")
         self.__obstacles = arcade.SpriteList()
@@ -69,45 +69,18 @@ class MazeWindow(arcade.Window):
         j2Next.center_x, j2Next.center_y = self.__j2.center_x + self.__j2direction_x, self.__j2.center_y + self.__j2direction_y 
         self.__j2 = j2Next
 
-        if arcade.check_for_collision_with_list(self.__j1, self.__obstacles):
+        if arcade.check_for_collision_with_list(self.__j1, self.__obstacles) or not self.isInside(self.__j1.center_x, self.__j1.center_y):
             print('j2 win')
-            self.__win = 2
-        
-        if arcade.check_for_collision_with_list(self.__j2, self.__obstacles):
-            print('j1 win')
-            self.__win = 1
-        
-        if not self.isInside(self.__j1.center_x, self.__j1.center_y):
-            print('j2 win')
-            self.__win = 2
-        
-        if not self.isInside(self.__j2.center_x, self.__j2.center_y):
-            print('j1 win')
-            self.__win = 1
-
-        if self.__win != 0:
             arcade.close_window()
-            if self.__win == 1:
-                print('j1 win')
-            else:
-                print('j2 win')
+        
+        if arcade.check_for_collision_with_list(self.__j2, self.__obstacles) or not self.isInside(self.__j2.center_x, self.__j2.center_y):
+            print('j1 win')
+            arcade.close_window()
 
     def isInside(self, x, y):
         return x >= 0 and x < SCREEN_WIDTH and y >= 0 and y < SCREEN_HEIGHT    
 
 
-class Agent:
-    def __init__(self, env, alpha = 1, gamma = 0.6, cooling_rate = 0.999):
-        pass
-
-
-    def best_action(self):
-        # if random() < self.__temperature:
-        #     self.__temperature *= self.__cooling_rate
-        #     return choice(ACTIONS)
-        # else:
-        q = self.__qtable[self.__state]
-        return max(q, key = q.get)
 
 
 
