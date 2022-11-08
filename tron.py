@@ -7,6 +7,43 @@ SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 1000
 SPRITE_OFFSET = 10.5
 
+ACTION_UP = 'U'
+ACTION_DOWN = 'D'
+ACTION_LEFT = 'L'
+ACTION_RIGHT = 'R'
+ACTIONS = [ACTION_UP, ACTION_DOWN, ACTION_LEFT, ACTION_RIGHT]
+
+
+class Agent:
+    def __init__(self, alpha = 1, gamma = 0.6, cooling_rate = 0.999):
+        # self.__env = env
+        self.__alpha = alpha
+        self.__gamma = gamma
+        self.__cooling_rate = cooling_rate
+
+        self.__qTable = {}
+
+
+        states = self.init_states()
+
+
+        for state in states:
+            self.__qTable[state] = {}
+            for action in ACTIONS:
+                self.__qTable[state][action] = 0.0
+
+        print(self.__qTable)
+
+    def init_states(self):
+        states = []
+        radarSize = 9
+
+        for i in range(1, 2**radarSize):
+            states.append(bin(i)[2:].zfill(radarSize))
+            
+        # print(states)
+        return states
+
 class TronWindow(arcade.View):
     def __init__(self):
         super().__init__()
@@ -99,6 +136,8 @@ class WinView(arcade.View):
 
 
 if __name__ == '__main__':
+    agent = Agent()
+    
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, "TRON HERITAGE")
     tronView = TronWindow()
     window.show_view(tronView)
