@@ -36,11 +36,12 @@ class Environnement:
     def start(self):
         return self.__start
 class Agent:
-    def __init__(self, env, alpha = 0.5, gamma = 1, cooling_rate = 0.999):
+    def __init__(self, env, filePath = 'agent.al1', alpha = 0.2, gamma = 1, cooling_rate = 0.999):
         self.__env = env
         self.__alpha = alpha
         self.__gamma = gamma
         self.__cooling_rate = cooling_rate
+        self.__file = filePath
 
         self.__qTable = {}
 
@@ -259,6 +260,12 @@ class TronWindow(arcade.View):
         else:
             self.__agentJ2.updateReward(j2state, 0)
 
+        if arcade.check_for_collision(self.__j1, self.__j2):
+            self.__agentJ1.updateReward(j1state, -1000)
+            self.__agentJ2.updateReward(j2state, -1000)
+            self.reset()
+            # self.window.show_view(WinView("Draw"))
+
         self.__obstacles.append(self.__j1)
         self.__obstacles.append(self.__j2)
 
@@ -307,17 +314,21 @@ class WinView(arcade.View):
 
 if __name__ == '__main__':
     env = Environnement()
-    agentJ1 = Agent(env)
-    agentJ2 = Agent(env)
+    qTableJ1FilePath = "qTableJ1"
+    qTableJ2FilePath = "qTableJ2"
+    agentJ1 = Agent(env, qTableJ1FilePath)
+    agentJ2 = Agent(env, qTableJ2FilePath)
     
-    if os.path.exists(FILE_AGENT):
-        agentJ1.load(FILE_AGENT)
-        agentJ2.load(FILE_AGENT)
+    if os.path.exists(qTableJ1FilePath):
+        agentJ1.load(qTableJ1FilePath)
+
+    if os.path.exists(qTableJ2FilePath):
+        agentJ2.load(qTableJ2FilePath)
 
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, "TRON HERITAGE")
     tronView = TronWindow(agentJ1, agentJ2)
     window.show_view(tronView)
     arcade.run()
 
-    agentJ1.save(FILE_AGENT)
-    agentJ2.save(FILE_AGENT)
+    agentJ1.save(qTableJ1FilePath)
+    agentJ2.save(qTableJ2FilePath)
