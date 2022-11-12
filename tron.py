@@ -1,4 +1,6 @@
 import arcade
+import os
+import pickle
 
 
 SPRITE_SCALE = 0.02
@@ -91,11 +93,11 @@ class Agent:
     
     def load(self, filename):
         with open(filename, 'rb') as file:
-            self.__qtable, self.__history = pickle.load(file)
+            self.__qTable = pickle.load(file)
 
     def save(self, filename):
         with open(filename, 'wb') as file:
-            pickle.dump((self.__qtable, self.__history), file)
+            pickle.dump((self.__qTable), file)
 
     
 
