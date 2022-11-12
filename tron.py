@@ -19,6 +19,9 @@ ACTION_MOVE = {
     ACTION_RIGHT: (SPRITE_OFFSET, 0)
 }
 
+FILE_AGENT = 'agent.al1'
+
+
 class Environnement:
     def __init__(self):
         self.__start = "000000000"
@@ -85,6 +88,14 @@ class Agent:
             
         
         return states
+    
+    def load(self, filename):
+        with open(filename, 'rb') as file:
+            self.__qtable, self.__history = pickle.load(file)
+
+    def save(self, filename):
+        with open(filename, 'wb') as file:
+            pickle.dump((self.__qtable, self.__history), file)
 
     
 
@@ -287,7 +298,14 @@ if __name__ == '__main__':
     agentJ1 = Agent(env)
     agentJ2 = Agent(env)
     
+    if os.path.exists(FILE_AGENT):
+        agentJ1.load(FILE_AGENT)
+        agentJ2.load(FILE_AGENT)
+
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, "TRON HERITAGE")
     tronView = TronWindow(agentJ1, agentJ2)
     window.show_view(tronView)
     arcade.run()
+
+    agentJ1.save(FILE_AGENT)
+    agentJ2.save(FILE_AGENT)
