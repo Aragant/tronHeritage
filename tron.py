@@ -36,7 +36,7 @@ class Environnement:
     def start(self):
         return self.__start
 class Agent:
-    def __init__(self, env, alpha = 0.1, gamma = 0.6, cooling_rate = 0.999):
+    def __init__(self, env, alpha = 0.5, gamma = 1, cooling_rate = 0.999):
         self.__env = env
         self.__alpha = alpha
         self.__gamma = gamma
@@ -70,7 +70,7 @@ class Agent:
 
     def updateReward(self, state, reward):
         
-        maxQ = max(self.__qTable[self.__state].values())
+        maxQ = max(self.__qTable[state].values())
         
         delta = self.__alpha * (reward + self.__gamma * maxQ - self.__qTable[self.__state][self.__currentAction])
         print("score : ", self.__qTable[self.__state][self.__currentAction], " + ", delta)
@@ -80,6 +80,8 @@ class Agent:
     def reset(self):
         self.__state = env.start
         
+    def updateState(self, state):
+        self.__state = state
 
     def init_states(self):
         states = []
@@ -124,6 +126,9 @@ class TronWindow(arcade.View):
         self.__j2state = self.getRadarState(self.__j2Radar)
 
         print(self.__j1.height, self.__j1.width)
+
+        self.__obstacles.append(self.__j1)
+        self.__obstacles.append(self.__j2)
 
         self.__win = 0
 
@@ -207,8 +212,8 @@ class TronWindow(arcade.View):
                 self.__j2direction_x, self.__j2direction_y = SPRITE_OFFSET, 0
     
     def on_update(self, delta_time: float):
-        self.__obstacles.append(self.__j1)
-        self.__obstacles.append(self.__j2)
+        # self.__obstacles.append(self.__j1)
+        # self.__obstacles.append(self.__j2)
 
         direction = self.__agentJ1.step()
         self.__j1direction_x, self.__j1direction_y = direction[0], direction[1]
@@ -243,7 +248,8 @@ class TronWindow(arcade.View):
             self.reset()
             # self.window.show_view(WinView("Red"))
         else:
-            self.__agentJ1.updateReward(j1state, -1)
+            self.__agentJ1.updateReward(j1state, 0)
+
 
         if arcade.check_for_collision_with_list(self.__j2, self.__obstacles) or not self.isInside(self.__j2.center_x, self.__j2.center_y):
             # self.__agentJ1.updateReward(j1state, 100)
@@ -251,7 +257,10 @@ class TronWindow(arcade.View):
             self.reset()
             # self.window.show_view(WinView("Blue"))
         else:
-            self.__agentJ2.updateReward(j2state, -1)
+            self.__agentJ2.updateReward(j2state, 0)
+
+        self.__obstacles.append(self.__j1)
+        self.__obstacles.append(self.__j2)
 
     def reset(self):
         self.__agentJ1.reset()
@@ -261,6 +270,7 @@ class TronWindow(arcade.View):
         self.__j2.center_x, self.__j2.center_y = SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT / 2
 
         self.__obstacles = arcade.SpriteList()
+        
 
 
     def getRadarState(self, radar):
