@@ -1,16 +1,16 @@
 from envi import ACTION_MOVE
+import arcade
 
 class Environment:
     def __init__(self):
         self.__start = "000000000"
+            
 
-        def do(self, state, action):
-            move =  ACTION_MOVE[action]
-            return move
-
-
-    # def do():
-
+    def do(self, j1state, action):
+        move =  ACTION_MOVE[action]
+        
+        
+        return move, 0
 
     @property
     def start(self):

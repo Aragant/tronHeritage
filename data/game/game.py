@@ -1,5 +1,5 @@
 import arcade
-from envi import ACTION_MOVE, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITE_SCALE, SPRITE_OFFSET, RADAR_SIZE, ACTIONS, FILE_AGENT, BIKE_J1, BIKE_J2, RADAR_DISPLAY
+from envi import SCREEN_HEIGHT, SCREEN_WIDTH, SPRITE_OFFSET, RADAR_SIZE, BIKE_J1, BIKE_J2, RADAR_DISPLAY
 
 class TronWindow(arcade.View):
     def __init__(self, agentJ1, agentJ2):
@@ -133,7 +133,6 @@ class TronWindow(arcade.View):
 
         j1state = self.getRadarState(self.__j1Radar)
         j2state = self.getRadarState(self.__j2Radar)
-
         if arcade.check_for_collision_with_list(self.__j1, self.__obstacles) or not self.isInside(self.__j1.center_x, self.__j1.center_y):
             self.__agentJ1.updateReward(j1state, -1000)
             # self.__agentJ2.updateReward(j2state, 100)
@@ -155,7 +154,12 @@ class TronWindow(arcade.View):
             self.__agentJ1.updateReward(j1state, -1000)
             self.__agentJ2.updateReward(j2state, -1000)
             self.reset()
-            # self.window.show_view(WinView("Draw"))
+
+
+        # if arcade.check_for_collision_with_list(self.__j1, self.__obstacles) or not self.isInside(self.__j1.center_x, self.__j1.center_y) \
+        #     or arcade.check_for_collision_with_list(self.__j2, self.__obstacles) or not self.isInside(self.__j2.center_x, self.__j2.center_y) \
+        #     or arcade.check_for_collision(self.__j1, self.__j2):
+        #     self.reset()
 
         self.__obstacles.append(self.__j1)
         self.__obstacles.append(self.__j2)
@@ -169,8 +173,6 @@ class TronWindow(arcade.View):
 
         self.__obstacles = arcade.SpriteList()
         
-
-
     def getRadarState(self, radar):
         state = ""
         for case in radar:

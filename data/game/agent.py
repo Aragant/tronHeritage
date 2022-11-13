@@ -31,19 +31,19 @@ class Agent:
         # print("q : ", q)
         return max(q, key = q.get)
     
-    # def step(self):
-    #     action = self.best_action()
-    #     state, reward = self.__env.do(self.__state, action)
-    #     # print("action : ", self.__currentAction)
+    def step(self):
+        self.__currentAction = self.best_action()
+        state, reward = self.__env.do(self.__state, self.__currentAction)
+        # print("action : ", self.__currentAction)
 
-    #     maxQ = max(self.__qTable[state].values())
+        # maxQ = max(self.__qTable[state].values())
         
-    #     delta = self.__alpha * (reward + self.__gamma * maxQ - self.__qTable[self.__state][action])
-    #     # print("score : ", self.__qTable[self.__state][action], " + ", delta)
-    #     self.__qTable[self.__state][action] += delta
-    #     self.__state = state
+        # delta = self.__alpha * (reward + self.__gamma * maxQ - self.__qTable[self.__state][action])
+        # # print("score : ", self.__qTable[self.__state][action], " + ", delta)
+        # self.__qTable[self.__state][action] += delta
+        # self.__state = state
 
-    #     return action, reward
+        return state
 
     
     def reset(self):
@@ -70,10 +70,10 @@ class Agent:
         with open(filename, 'wb') as file:
             pickle.dump((self.__qTable), file)
 
-    def step(self):
-        self.__currentAction = self.best_action()
-        print("action : ", self.__currentAction)
-        return ACTION_MOVE[self.__currentAction]
+    # def step(self):
+    #     self.__currentAction = self.best_action()
+    #     print("action : ", self.__currentAction)
+    #     return ACTION_MOVE[self.__currentAction]
 
     def updateReward(self, state, reward):
         
