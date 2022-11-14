@@ -36,7 +36,7 @@ class Environnement:
     def start(self):
         return self.__start
 class Agent:
-    def __init__(self, env, filePath = 'agent.al1', alpha = 0.2, gamma = 1, cooling_rate = 0.999):
+    def __init__(self, env, filePath = 'agent.al1', alpha = 0.2, gamma = 0.5, cooling_rate = 0.999):
         self.__env = env
         self.__alpha = alpha
         self.__gamma = gamma
@@ -242,25 +242,25 @@ class TronWindow(arcade.View):
         
 
 
+        if arcade.check_for_collision(self.__j1, self.__j2) is not True:
+            if arcade.check_for_collision_with_list(self.__j1, self.__obstacles) or not self.isInside(self.__j1.center_x, self.__j1.center_y):
+                self.__agentJ1.updateReward(j1state, -1000)
+                # self.__agentJ2.updateReward(j2state, 100)
+                self.reset()
+                # self.window.show_view(WinView("Red"))
+            else:
+                self.__agentJ1.updateReward(j1state, 0)
 
-        if arcade.check_for_collision_with_list(self.__j1, self.__obstacles) or not self.isInside(self.__j1.center_x, self.__j1.center_y):
-            self.__agentJ1.updateReward(j1state, -1000)
-            # self.__agentJ2.updateReward(j2state, 100)
-            self.reset()
-            # self.window.show_view(WinView("Red"))
+
+            if arcade.check_for_collision_with_list(self.__j2, self.__obstacles) or not self.isInside(self.__j2.center_x, self.__j2.center_y):
+                # self.__agentJ1.updateReward(j1state, 100)
+                self.__agentJ2.updateReward(j2state, -1000)
+                self.reset()
+                # self.window.show_view(WinView("Blue"))
+            else:
+                self.__agentJ2.updateReward(j2state, 0)
+
         else:
-            self.__agentJ1.updateReward(j1state, 0)
-
-
-        if arcade.check_for_collision_with_list(self.__j2, self.__obstacles) or not self.isInside(self.__j2.center_x, self.__j2.center_y):
-            # self.__agentJ1.updateReward(j1state, 100)
-            self.__agentJ2.updateReward(j2state, -1000)
-            self.reset()
-            # self.window.show_view(WinView("Blue"))
-        else:
-            self.__agentJ2.updateReward(j2state, 0)
-
-        if arcade.check_for_collision(self.__j1, self.__j2):
             self.__agentJ1.updateReward(j1state, -1000)
             self.__agentJ2.updateReward(j2state, -1000)
             self.reset()
@@ -314,8 +314,8 @@ class WinView(arcade.View):
 
 if __name__ == '__main__':
     env = Environnement()
-    qTableJ1FilePath = "qTableJ1"
-    qTableJ2FilePath = "qTableJ2"
+    qTableJ1FilePath = "qTableJ1Alpha0.2Gamma0.5"
+    qTableJ2FilePath = "qTableJ2Alpha0.2Gamma0.5"
     agentJ1 = Agent(env, qTableJ1FilePath)
     agentJ2 = Agent(env, qTableJ2FilePath)
     
