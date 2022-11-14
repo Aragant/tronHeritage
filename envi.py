@@ -21,9 +21,12 @@ ACTION_MOVE = {
 FILE_AGENT = 'agent.al1'
 
 
-QTABLE_FILE_PATH_J1 = 'data/qtable/qTableJ1'
-QTABLE_FILE_PATH_J2 = 'data/qtable/qTableJ2'
+QTABLE_FILE_PATH_J1 = 'data/qtable/qTableJ1Bis'
+QTABLE_FILE_PATH_J2 = 'data/qtable/qTableJ2Bis'
 
 BIKE_J1 = "data/assets/boxBlue.png"
 BIKE_J2 = "data/assets/boxRed.png"
 RADAR_DISPLAY = "data/assets/boxViolet.jpg"
+
+ALPHA = 0.1
+GAMMA = 0.6

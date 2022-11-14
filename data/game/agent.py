@@ -1,9 +1,9 @@
-from envi import ACTION_MOVE, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITE_SCALE, SPRITE_OFFSET, RADAR_SIZE, ACTIONS, FILE_AGENT
+from envi import ACTION_MOVE, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITE_SCALE, SPRITE_OFFSET, RADAR_SIZE, ACTIONS, FILE_AGENT, ALPHA, GAMMA
 import os
 import pickle
 
 class Agent:
-    def __init__(self, env, filePath = 'agent.al1', alpha = 0.2, gamma = 1, cooling_rate = 0.999):
+    def __init__(self, env, filePath = 'agent.al1', alpha = ALPHA, gamma = GAMMA, cooling_rate = 0.999):
         self.__env = env
         self.__alpha = alpha
         self.__gamma = gamma
@@ -47,7 +47,8 @@ class Agent:
 
     
     def reset(self):
-        self.__state = self.__env.start
+        self.__state = "000000000"
+        self.__score = 0
         
     def updateState(self, state):
         self.__state = state
@@ -80,7 +81,8 @@ class Agent:
         maxQ = max(self.__qTable[state].values())
         
         delta = self.__alpha * (reward + self.__gamma * maxQ - self.__qTable[self.__state][self.__currentAction])
-        print("score : ", self.__qTable[self.__state][self.__currentAction], " + ", delta)
+        self.__score += reward
+        print("score: ", self.__score)
         self.__qTable[self.__state][self.__currentAction] += delta
         self.__state = state
     

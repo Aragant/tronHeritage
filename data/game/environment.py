@@ -3,6 +3,8 @@ import arcade
 
 class Environment:
     def __init__(self):
+        self.__j1Start = (0, 20)
+        self.__j2Start = (0, -20)
         self.__start = "000000000"
             
 
