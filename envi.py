@@ -30,3 +30,6 @@ RADAR_DISPLAY = "data/assets/boxViolet.jpg"
 
 ALPHA = 0.9
 GAMMA = 1
+
+START_J1 = (20, 0)
+START_J2 = (-20, 0)

@@ -33,7 +33,7 @@ class Agent:
     
     def step(self):
         self.__currentAction = self.best_action()
-        state, reward = self.__env.do(self.__state, self.__currentAction)
+        state, reward = self.__env.do(self.__currentAction)
         # print("action : ", self.__currentAction)
 
         # maxQ = max(self.__qTable[state].values())
@@ -43,7 +43,7 @@ class Agent:
         # self.__qTable[self.__state][action] += delta
         # self.__state = state
 
-        return state
+        return ACTION_MOVE[self.__currentAction]
 
     
     def reset(self):
