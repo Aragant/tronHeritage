@@ -133,26 +133,31 @@ class TronWindow(arcade.View):
 
         j1state = self.getRadarState(self.__j1Radar)
         j2state = self.getRadarState(self.__j2Radar)
-        if arcade.check_for_collision_with_list(self.__j1, self.__obstacles) or not self.isInside(self.__j1.center_x, self.__j1.center_y):
-            self.__agentJ1.updateReward(j1state, -1000)
-            # self.__agentJ2.updateReward(j2state, 100)
-            self.reset()
-            # self.window.show_view(WinView("Red"))
-        else:
-            self.__agentJ1.updateReward(j1state, 0)
+
+        if arcade.check_for_collision(self.__j1, self.__j2) is not True:
+            if arcade.check_for_collision_with_list(self.__j1, self.__obstacles) or not self.isInside(self.__j1.center_x, self.__j1.center_y):
+                self.__agentJ1.updateReward(j1state, -2 * 2**9)
+                self.__agentJ2.updateReward(j2state, 2**9)
+                # self.__agentJ2.updateReward(j2state, 100)
+                self.reset()
+                # self.window.show_view(WinView("Red"))
+            else:
+                self.__agentJ1.updateReward(j1state, 0)
 
 
-        if arcade.check_for_collision_with_list(self.__j2, self.__obstacles) or not self.isInside(self.__j2.center_x, self.__j2.center_y):
-            # self.__agentJ1.updateReward(j1state, 100)
-            self.__agentJ2.updateReward(j2state, -1000)
-            self.reset()
-            # self.window.show_view(WinView("Blue"))
-        else:
-            self.__agentJ2.updateReward(j2state, 0)
+            if arcade.check_for_collision_with_list(self.__j2, self.__obstacles) or not self.isInside(self.__j2.center_x, self.__j2.center_y):
+                # self.__agentJ1.updateReward(j1state, 100)
+                self.__agentJ2.updateReward(j2state, -2 * 2**9)
+                self.__agentJ1.updateReward(j1state, 2**9)
+                self.reset()
+                # self.window.show_view(WinView("Blue"))
+            else:
+                self.__agentJ2.updateReward(j2state, 0)
 
-        if arcade.check_for_collision(self.__j1, self.__j2):
-            self.__agentJ1.updateReward(j1state, -1000)
-            self.__agentJ2.updateReward(j2state, -1000)
+
+        else :
+            self.__agentJ1.updateReward(j1state, -2 * 2**9)
+            self.__agentJ2.updateReward(j2state, -2 * 2**9)
             self.reset()
 
 

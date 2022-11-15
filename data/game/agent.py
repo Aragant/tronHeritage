@@ -82,7 +82,7 @@ class Agent:
         
         delta = self.__alpha * (reward + self.__gamma * maxQ - self.__qTable[self.__state][self.__currentAction])
         self.__score += reward
-        print("score: ", self.__score)
+        print("score: ", self.__score, "delta : ", delta)
         self.__qTable[self.__state][self.__currentAction] += delta
         self.__state = state
     
