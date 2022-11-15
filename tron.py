@@ -39,8 +39,8 @@ if __name__ == '__main__':
         agentJ2.load(qTableJ2FilePath)
 
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_NAME)
-    tronView = TronWindow(agentJ1, agentJ2)
-    tronView.setup()
+    tronView = TronWindow(agentJ1, agentJ2, env)
+
     window.show_view(tronView)
     arcade.run()
 

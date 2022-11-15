@@ -1,86 +1,42 @@
 import arcade
-from envi import SCREEN_HEIGHT, SCREEN_WIDTH, SPRITE_OFFSET, RADAR_SIZE, BIKE_J1, BIKE_J2, RADAR_DISPLAY
+from envi import WINNER, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITE_OFFSET, RADAR_SIZE, BIKE_J1, BIKE_J2, RADAR_DISPLAY, ACTION_MOVE, ACTION_UP, ACTION_DOWN, ACTION_LEFT, ACTION_RIGHT
+import data.game.environment as env
 
 class TronWindow(arcade.View):
-    def __init__(self, agentJ1, agentJ2):
+    def __init__(self, agentJ1, agentJ2, env):
         super().__init__()
         self.__agentJ1 = agentJ1
         self.__agentJ2 = agentJ2
+        self.__env = env
 
-    def setup(self):
-        self.__obstacles = arcade.SpriteList()
-        self.__j1 = arcade.Sprite(BIKE_J1, image_height=10, image_width=10)
-        self.__j2 = arcade.Sprite(BIKE_J2, image_height=10, image_width=10)
+        self.__lastWinner = "None"
 
-        self.__j1.center_x, self.__j1.center_y = SCREEN_WIDTH / 2 + 20, SCREEN_HEIGHT / 2
-        self.__j2.center_x, self.__j2.center_y = SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT / 2
+        self.__j1 = arcade.Sprite(BIKE_J1, image_height=SPRITE_OFFSET, image_width=SPRITE_OFFSET)
+        self.__j2 = arcade.Sprite(BIKE_J2, image_height=SPRITE_OFFSET, image_width=SPRITE_OFFSET)
 
-        self.__j1direction_x, self.__j1direction_y = SPRITE_OFFSET, 0
-        self.__j2direction_x, self.__j2direction_y = - SPRITE_OFFSET, 0
-
-        self.__j1Radar = self.init_radar_display(self.__j1)
-        self.__j2Radar = self.init_radar_display(self.__j2)
-
-        self.__j1state = self.getRadarState(self.__j1Radar)
-        self.__j2state = self.getRadarState(self.__j2Radar)
-
-        print(self.__j1.height, self.__j1.width)
-
-        self.__obstacles.append(self.__j1)
-        self.__obstacles.append(self.__j2)
-
-        self.__win = 0
+        self.reset()
 
     
-    def init_radar_display(self, player):
-        radar = []
+    def init_radar_display(self, radar):
+        radarDisplay = arcade.SpriteList()
+        for case in radar:
+            radarCase = arcade.Sprite(RADAR_DISPLAY, image_height=10, image_width=10)
+            radarCase.center_x, radarCase.center_y = case.x, case.y
+            radarDisplay.append(radarCase)
 
-        boxPath = RADAR_DISPLAY
 
-        case1 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case1.center_x, case1.center_y = player.center_x, player.center_y
-        case2 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case2.center_x, case2.center_y = player.center_x - SPRITE_OFFSET, player.center_y
-        case3 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case3.center_x, case3.center_y = player.center_x + SPRITE_OFFSET, player.center_y 
-    
-        case4 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case4.center_x, case4.center_y = player.center_x, player.center_y + SPRITE_OFFSET
-        case5 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case5.center_x, case5.center_y = player.center_x - SPRITE_OFFSET, player.center_y + SPRITE_OFFSET
-        case6 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case6.center_x, case6.center_y = player.center_x + SPRITE_OFFSET, player.center_y + SPRITE_OFFSET
-
-        case7 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case7.center_x, case7.center_y = player.center_x, player.center_y - SPRITE_OFFSET
-        case8 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case8.center_x, case8.center_y = player.center_x - SPRITE_OFFSET, player.center_y - SPRITE_OFFSET
-        case9 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case9.center_x, case9.center_y = player.center_x + SPRITE_OFFSET, player.center_y - SPRITE_OFFSET
-
-        radar.append(case1)
-        radar.append(case2)
-        radar.append(case3)
-        radar.append(case4)
-        radar.append(case5)
-        radar.append(case6)
-        radar.append(case7)
-        radar.append(case8)
-        radar.append(case9)
-
-        return radar
+        return radarDisplay
 
 
     def on_draw(self):
         
         arcade.start_render()
-        self.__j1.draw()
-        self.__j2.draw()
         self.__obstacles.draw()
-        for case in self.__j1Radar:
-            case.draw()
-        for case in self.__j2Radar:
-            case.draw()
+        self.__j1Radar.draw()
+        self.__j2Radar.draw()
+        arcade.draw_text(f'J1 Iteration: {self.__agentJ1.getStep} - J2 Iteration: {self.__agentJ2.getStep} - Last Winner: {self.__lastWinner}',
+                         10, 10,
+                         arcade.csscolor.WHITE, 20)
 
 
     def on_key_press(self, key, modifiers):
@@ -111,81 +67,42 @@ class TronWindow(arcade.View):
                 self.__j2direction_x, self.__j2direction_y = SPRITE_OFFSET, 0
     
     def on_update(self, delta_time: float):
-        # self.__obstacles.append(self.__j1)
-        # self.__obstacles.append(self.__j2)
-
-        direction = self.__agentJ1.step()
-        self.__j1direction_x, self.__j1direction_y = direction[0], direction[1]
-
-        direction = self.__agentJ2.step()
-        self.__j2direction_x, self.__j2direction_y = direction[0], direction[1]
+        
+        
+        directionJ1 = self.__agentJ1.best_action()
+        directionJ2 = self.__agentJ2.best_action()
+        stateJ1, stateJ2, rewardJ1, rewardJ2, winner = self.__env.step(directionJ1, directionJ2)
+        self.__agentJ1.step(stateJ1, rewardJ1)
+        self.__agentJ2.step(stateJ2, rewardJ2)
 
         j1Next = arcade.Sprite(BIKE_J1, image_height=10, image_width=10)
-        j1Next.center_x, j1Next.center_y = self.__j1.center_x + self.__j1direction_x, self.__j1.center_y + self.__j1direction_y
+        j1Next.center_x, j1Next.center_y = self.__env.j1.x, self.__env.j1.y
         self.__j1 = j1Next
 
         j2Next = arcade.Sprite(BIKE_J2, image_height=10, image_width=10)
-        j2Next.center_x, j2Next.center_y = self.__j2.center_x + self.__j2direction_x, self.__j2.center_y + self.__j2direction_y 
+        j2Next.center_x, j2Next.center_y = self.__env.j2.x, self.__env.j2.y
         self.__j2 = j2Next
 
-        self.__j1Radar = self.init_radar_display(self.__j1)
-        self.__j2Radar = self.init_radar_display(self.__j2)
+        self.__j1Radar = self.init_radar_display(self.__env.j1Radar)
+        self.__j2Radar = self.init_radar_display(self.__env.j2Radar)
 
-        j1state = self.getRadarState(self.__j1Radar)
-        j2state = self.getRadarState(self.__j2Radar)
-
-        if arcade.check_for_collision(self.__j1, self.__j2) is not True:
-            if arcade.check_for_collision_with_list(self.__j1, self.__obstacles) or not self.isInside(self.__j1.center_x, self.__j1.center_y):
-                self.__agentJ1.updateReward(j1state, -2 * 2**9)
-                self.__agentJ2.updateReward(j2state, 2**9)
-                # self.__agentJ2.updateReward(j2state, 100)
-                self.reset()
-                # self.window.show_view(WinView("Red"))
-            else:
-                self.__agentJ1.updateReward(j1state, 0)
-
-
-            if arcade.check_for_collision_with_list(self.__j2, self.__obstacles) or not self.isInside(self.__j2.center_x, self.__j2.center_y):
-                # self.__agentJ1.updateReward(j1state, 100)
-                self.__agentJ2.updateReward(j2state, -2 * 2**9)
-                self.__agentJ1.updateReward(j1state, 2**9)
-                self.reset()
-                # self.window.show_view(WinView("Blue"))
-            else:
-                self.__agentJ2.updateReward(j2state, 0)
-
-
-        else :
-            self.__agentJ1.updateReward(j1state, -2 * 2**9)
-            self.__agentJ2.updateReward(j2state, -2 * 2**9)
+        self.__obstacles.append(self.__j1)
+        self.__obstacles.append(self.__j2)
+        
+        if winner != 0:
+            self.__lastWinner = WINNER[winner]
             self.reset()
 
+    def reset(self):
+        self.__env.reset()
+        self.__agentJ1.reset()
+        self.__agentJ2.reset()
 
-        # if arcade.check_for_collision_with_list(self.__j1, self.__obstacles) or not self.isInside(self.__j1.center_x, self.__j1.center_y) \
-        #     or arcade.check_for_collision_with_list(self.__j2, self.__obstacles) or not self.isInside(self.__j2.center_x, self.__j2.center_y) \
-        #     or arcade.check_for_collision(self.__j1, self.__j2):
-        #     self.reset()
+        self.__obstacles = arcade.SpriteList()
+
+        self.__j1.center_x, self.__j1.center_y = self.__env.j1.x, self.__env.j1.y
+        self.__j2.center_x, self.__j2.center_y = self.__env.j2.x, self.__env.j2.y
 
         self.__obstacles.append(self.__j1)
         self.__obstacles.append(self.__j2)
 
-    def reset(self):
-        self.__agentJ1.reset()
-        self.__agentJ2.reset()
-
-        self.__j1.center_x, self.__j1.center_y = SCREEN_WIDTH / 2 + 20, SCREEN_HEIGHT / 2
-        self.__j2.center_x, self.__j2.center_y = SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT / 2
-
-        self.__obstacles = arcade.SpriteList()
-        
-    def getRadarState(self, radar):
-        state = ""
-        for case in radar:
-            if arcade.check_for_collision_with_list(case, self.__obstacles) or not self.isInside(case.center_x, case.center_y):
-                state += "1"
-            else:
-                state += "0"
-        return state
-
-    def isInside(self, x, y):
-        return x >= 0 and x < SCREEN_WIDTH and y >= 0 and y < SCREEN_HEIGHT    

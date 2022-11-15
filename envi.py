@@ -21,8 +21,8 @@ ACTION_MOVE = {
 FILE_AGENT = 'agent.al1'
 
 
-QTABLE_FILE_PATH_J1 = 'data/qtable/qTableJ1VictoryRewardGamma1Alpha0.9'
-QTABLE_FILE_PATH_J2 = 'data/qtable/qTableJ2VictoryRewardGamma1Alpha0.9'
+QTABLE_FILE_PATH_J1 = 'data/qtable/testj1'
+QTABLE_FILE_PATH_J2 = 'data/qtable/testj2'
 
 BIKE_J1 = "data/assets/boxBlue.png"
 BIKE_J2 = "data/assets/boxRed.png"
@@ -33,3 +33,12 @@ GAMMA = 1
 
 START_J1 = (20, 0)
 START_J2 = (-20, 0)
+
+RADAR_LENGTH = 9
+LEN_STATE = 2**RADAR_LENGTH
+
+WINNER = {
+    1: "J1",
+    2: "J2",
+    3: "Draw"
+}
