@@ -55,7 +55,7 @@ class Agent:
 
     def init_states(self):
         states = []
-        radarSize = 9
+        radarSize = 25
 
         for i in range(0, 2**radarSize):
             states.append(bin(i)[2:].zfill(radarSize))
