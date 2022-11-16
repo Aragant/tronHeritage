@@ -1,8 +1,8 @@
 GAME_NAME = ""
 GAME_VERSION = "0.0.1"
 SPRITE_SCALE = 0.02
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 1000
+SCREEN_WIDTH = 250
+SCREEN_HEIGHT = 250
 SPRITE_OFFSET = 10
 RADAR_SIZE = 10
 
@@ -21,8 +21,8 @@ ACTION_MOVE = {
 FILE_AGENT = 'agent.al1'
 
 
-QTABLE_FILE_PATH_J1 = 'data/qtable/bigRadarJ1'
-QTABLE_FILE_PATH_J2 = 'data/qtable/bigRadarJ2'
+QTABLE_FILE_PATH_J1 = 'data/qtable/bigRadarJ1Histo'
+QTABLE_FILE_PATH_J2 = 'data/qtable/bigRadarJ2Histo'
 
 BIKE_J1 = "data/assets/boxBlue.png"
 BIKE_J2 = "data/assets/boxRed.png"

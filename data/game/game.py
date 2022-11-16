@@ -24,7 +24,7 @@ class TronWindow(arcade.View):
         self.__j1state = self.getRadarState(self.__j1Radar)
         self.__j2state = self.getRadarState(self.__j2Radar)
 
-        print(self.__j1.height, self.__j1.width)
+        
 
         self.__obstacles.append(self.__j1)
         self.__obstacles.append(self.__j2)
@@ -62,38 +62,10 @@ class TronWindow(arcade.View):
         case10.center_x, case10.center_y = player.center_x - SPRITE_OFFSET * 2, player.center_y
         case11 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
         case11.center_x, case11.center_y = player.center_x + SPRITE_OFFSET * 2, player.center_y
-
         case12 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case12.center_x, case12.center_y = player.center_x - SPRITE_OFFSET * 2, player.center_y + SPRITE_OFFSET
+        case12.center_x, case12.center_y = player.center_x, player.center_y + SPRITE_OFFSET * 2
         case13 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case13.center_x, case13.center_y = player.center_x + SPRITE_OFFSET * 2, player.center_y + SPRITE_OFFSET
-
-        case14 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case14.center_x, case14.center_y = player.center_x - SPRITE_OFFSET * 2, player.center_y - SPRITE_OFFSET
-        case15 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case15.center_x, case15.center_y = player.center_x + SPRITE_OFFSET * 2, player.center_y - SPRITE_OFFSET
-
-        case16 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case16.center_x, case16.center_y = player.center_x, player.center_y - SPRITE_OFFSET * 2
-        case17 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case17.center_x, case17.center_y = player.center_x - SPRITE_OFFSET, player.center_y - SPRITE_OFFSET * 2
-        case18 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case18.center_x, case18.center_y = player.center_x + SPRITE_OFFSET, player.center_y - SPRITE_OFFSET * 2
-        case19 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case19.center_x, case19.center_y = player.center_x - SPRITE_OFFSET * 2, player.center_y - SPRITE_OFFSET * 2
-        case20 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case20.center_x, case20.center_y = player.center_x + SPRITE_OFFSET * 2, player.center_y - SPRITE_OFFSET * 2
-
-        case21 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case21.center_x, case21.center_y = player.center_x, player.center_y + SPRITE_OFFSET * 2
-        case22 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case22.center_x, case22.center_y = player.center_x - SPRITE_OFFSET, player.center_y + SPRITE_OFFSET * 2
-        case23 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case23.center_x, case23.center_y = player.center_x + SPRITE_OFFSET, player.center_y + SPRITE_OFFSET * 2
-        case24 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case24.center_x, case24.center_y = player.center_x - SPRITE_OFFSET * 2, player.center_y + SPRITE_OFFSET * 2
-        case25 = arcade.Sprite(boxPath, image_height=RADAR_SIZE, image_width=RADAR_SIZE)
-        case25.center_x, case25.center_y = player.center_x + SPRITE_OFFSET * 2, player.center_y + SPRITE_OFFSET * 2 
+        case13.center_x, case13.center_y = player.center_x, player.center_y - SPRITE_OFFSET * 2
 
         radar.append(case1)
         radar.append(case2)
@@ -108,18 +80,6 @@ class TronWindow(arcade.View):
         radar.append(case11)
         radar.append(case12)
         radar.append(case13)
-        radar.append(case14)
-        radar.append(case15)
-        radar.append(case16)
-        radar.append(case17)
-        radar.append(case18)
-        radar.append(case19)
-        radar.append(case20)
-        radar.append(case21)
-        radar.append(case22)
-        radar.append(case23)
-        radar.append(case24)
-        radar.append(case25)
 
         return radar
 

@@ -1,6 +1,8 @@
 import arcade
 import os
 import pickle
+import matplotlib.pyplot as plt
+
 
 from data.game.game import TronWindow
 from envi import ACTION_MOVE, SCREEN_HEIGHT, SCREEN_WIDTH, SPRITE_SCALE, SPRITE_OFFSET, RADAR_SIZE, ACTIONS, QTABLE_FILE_PATH_J1, QTABLE_FILE_PATH_J2, FILE_AGENT, GAME_NAME
@@ -46,3 +48,9 @@ if __name__ == '__main__':
 
     agentJ1.save(qTableJ1FilePath)
     agentJ2.save(qTableJ2FilePath)
+
+    plt.plot(agentJ1.history)
+    plt.show()
+
+    plt.plot(agentJ2.history)
+    plt.show()

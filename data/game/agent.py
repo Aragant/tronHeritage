@@ -9,6 +9,8 @@ class Agent:
         self.__gamma = gamma
         self.__cooling_rate = cooling_rate
         self.__file = filePath
+        self.__history = []
+        self.__score = 0
 
         self.__qTable = {}
 
@@ -46,16 +48,19 @@ class Agent:
         return state
 
     
-    def reset(self):
-        self.__state = "000000000"
+    def reset(self, append_score = True):
+        if append_score:
+            self.__history.append(self.__score)
+        self.__state = "0000000000000"
         self.__score = 0
+        
         
     def updateState(self, state):
         self.__state = state
 
     def init_states(self):
         states = []
-        radarSize = 25
+        radarSize = 13
 
         for i in range(0, 2**radarSize):
             states.append(bin(i)[2:].zfill(radarSize))
@@ -65,11 +70,11 @@ class Agent:
     
     def load(self, filename):
         with open(filename, 'rb') as file:
-            self.__qTable = pickle.load(file)
+            self.__qTable, self.__history = pickle.load(file)
 
     def save(self, filename):
         with open(filename, 'wb') as file:
-            pickle.dump((self.__qTable), file)
+            pickle.dump((self.__qTable, self.__history), file)
 
     # def step(self):
     #     self.__currentAction = self.best_action()
@@ -82,7 +87,9 @@ class Agent:
         
         delta = self.__alpha * (reward + self.__gamma * maxQ - self.__qTable[self.__state][self.__currentAction])
         self.__score += reward
-        print("score: ", self.__score, "delta : ", delta)
         self.__qTable[self.__state][self.__currentAction] += delta
         self.__state = state
     
+    @property
+    def history(self):
+        return self.__history
